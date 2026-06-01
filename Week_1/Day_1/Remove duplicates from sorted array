@@ -1,1 +1,16 @@
+ class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int uniquePos = 0;
+
+        for (int current = 1; current < nums.size(); current++) {
+            if (nums[current] != nums[uniquePos]) {
+                uniquePos++;
+                nums[uniquePos] = nums[current];
+            }
+        }
+
+        return uniquePos + 1;
+    }
+};
 
