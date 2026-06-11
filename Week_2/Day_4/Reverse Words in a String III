@@ -1,1 +1,33 @@
 
+class Solution {
+public:
+    string reverseWords(string s) {
+
+        int n = s.size();
+        int i = 0;
+
+        while (i < n) {
+
+            int first = i;
+
+            while (i < n && s[i] != ' ') {
+                i++;
+            }
+
+            int last = i - 1;
+
+            while (first < last) {
+                char ch = s[first];
+                s[first] = s[last];
+                s[last] = ch;
+
+                first++;
+                last--;
+            }
+
+            i++;
+        }
+
+        return s;
+    }
+};
