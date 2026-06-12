@@ -1,1 +1,43 @@
+class Solution {
+public:
+    int compress(vector<char>& chars) {
 
+        int n = chars.size();
+        int i = 0;
+        int index = 0;
+
+        while (i < n) {
+
+            char ch = chars[i];
+            int count = 0;
+
+            while (i < n && chars[i] == ch) {
+                count++;
+                i++;
+            }
+
+            chars[index] = ch;
+            index++;
+
+            if (count > 1) {
+
+                char arr[10];
+                int len = 0;
+
+                while (count > 0) {
+                    int digit = count % 10;
+                    arr[len] = digit + '0';
+                    len++;
+                    count = count / 10;
+                }
+
+                for (int j = len - 1; j >= 0; j--) {
+                    chars[index] = arr[j];
+                    index++;
+                }
+            }
+        }
+
+        return index;
+    }
+};
