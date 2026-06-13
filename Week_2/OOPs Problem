@@ -1,1 +1,50 @@
+OOPs PROBLEM :-
 
+interface Playable {
+    void play();
+}
+
+class Veena implements Playable {
+    @Override
+    public void play() {
+        System.out.println("Veena produces soothing sound of strings!");
+    }
+}
+
+class Saxophone implements Playable {
+    @Override
+    public void play() {
+        System.out.println("Saxophone blows a beautiful wind melody!");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+
+        System.out.println("a. Veena Object:");
+        Veena v = new Veena();
+        v.play();
+
+        System.out.println("b. Saxophone Object:");
+        Saxophone s = new Saxophone();
+        s.play();
+
+        System.out.println("c. Using Playable Reference:");
+        Playable p1 = new Veena();
+        p1.play();
+
+        Playable p2 = new Saxophone();
+        p2.play();
+    }
+}
+
+
+OUTPUT :-
+
+a. Veena Object:
+Veena produces soothing sound of strings!
+b. Saxophone Object:
+Saxophone blows a beautiful wind melody!
+c. Using Playable Reference:
+Veena produces soothing sound of strings!
+Saxophone blows a beautiful wind melody!
