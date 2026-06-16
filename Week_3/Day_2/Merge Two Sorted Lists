@@ -13,7 +13,6 @@ class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* first, ListNode* second) {
 
-        // If one list is empty
         if (first == NULL)
             return second;
 
@@ -23,7 +22,6 @@ public:
         ListNode *head = NULL;
         ListNode *last = NULL;
 
-        // Build the merged list manually
         while (first != NULL && second != NULL) {
 
             ListNode *chosen;
@@ -45,7 +43,6 @@ public:
             }
         }
 
-        // Attach the remaining nodes
         if (first != NULL)
             last->next = first;
         else
