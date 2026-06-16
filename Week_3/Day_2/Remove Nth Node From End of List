@@ -13,7 +13,6 @@ class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
 
-        // Count total nodes
         int length = 0;
         ListNode *current = head;
 
@@ -22,7 +21,6 @@ public:
             current = current->next;
         }
 
-        // If first node has to be removed
         if (length == n) {
             ListNode *temp = head;
             head = head->next;
@@ -30,7 +28,6 @@ public:
             return head;
         }
 
-        // Find node before the one to delete
         int move = length - n;
         current = head;
 
@@ -38,7 +35,6 @@ public:
             current = current->next;
         }
 
-        // Delete the target node
         ListNode *target = current->next;
         current->next = target->next;
         delete target;
