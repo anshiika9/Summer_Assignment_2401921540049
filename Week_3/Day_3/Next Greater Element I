@@ -1,1 +1,33 @@
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
 
+        unordered_map<int, int> answerMap;
+        vector<int> helper;
+        
+        for (int pos = nums2.size() - 1; pos >= 0; pos--) {
+
+            int current = nums2[pos];
+
+            while (!helper.empty() && helper.back() <= current) {
+                helper.pop_back();
+            }
+
+            if (helper.empty()) {
+                answerMap[current] = -1;
+            } else {
+                answerMap[current] = helper.back();
+            }
+
+            helper.push_back(current);
+        }
+
+        vector<int> finalAnswer;
+
+        for (int i = 0; i < nums1.size(); i++) {
+            finalAnswer.push_back(answerMap[nums1[i]]);
+        }
+
+        return finalAnswer;
+    }
+};
