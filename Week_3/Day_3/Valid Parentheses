@@ -1,1 +1,45 @@
+class Solution {
+public:
+    bool isValid(string s) {
 
+        string holder = "";
+
+        for (int i = 0; i < (int)s.size(); i++) {
+
+            char ch = s[i];
+
+            if (ch == '(' || ch == '{' || ch == '[') {
+
+                holder += ch;
+            }
+            else {
+
+                if (holder.length() == 0) {
+                    return false;
+                }
+
+                char recent = holder[holder.length() - 1];
+
+                bool matched = false;
+
+                if (recent == '(' && ch == ')') {
+                    matched = true;
+                }
+                else if (recent == '{' && ch == '}') {
+                    matched = true;
+                }
+                else if (recent == '[' && ch == ']') {
+                    matched = true;
+                }
+
+                if (!matched) {
+                    return false;
+                }
+
+                holder.erase(holder.length() - 1, 1);
+            }
+        }
+
+        return holder.length() == 0;
+    }
+};
