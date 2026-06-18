@@ -1,1 +1,81 @@
+class RecentCounter {
+private:
+    int* timestamps;
+    int capacity;
+    int frontIndex;
+    int backIndex;
+    int count;
 
+    void resize() {
+        int newCapacity = capacity * 2;
+        int* newArray = new int[newCapacity];
+
+        int writeIndex = 0;
+        int readIndex = frontIndex;
+        int itemsCopied = 0;
+
+        while (itemsCopied < count) {
+            newArray[writeIndex] = timestamps[readIndex];
+            writeIndex = writeIndex + 1;
+            readIndex = readIndex + 1;
+            if (readIndex == capacity) {
+                readIndex = 0;
+            }
+            itemsCopied = itemsCopied + 1;
+        }
+
+        delete[] timestamps;
+        timestamps = newArray;
+        capacity = newCapacity;
+        frontIndex = 0;
+        backIndex = count;
+    }
+
+public:
+    RecentCounter() {
+        capacity = 4;
+        timestamps = new int[capacity];
+        frontIndex = 0;
+        backIndex = 0;
+        count = 0;
+    }
+
+    int ping(int t) {
+        if (count == capacity) {
+            resize();
+        }
+
+        timestamps[backIndex] = t;
+        backIndex = backIndex + 1;
+        if (backIndex == capacity) {
+            backIndex = 0;
+        }
+        count = count + 1;
+
+        int lowerBound = t - 3000;
+
+        bool keepTrimming = true;
+        while (keepTrimming) {
+            if (count == 0) {
+                keepTrimming = false;
+            } else {
+                int oldestTime = timestamps[frontIndex];
+                if (oldestTime < lowerBound) {
+                    frontIndex = frontIndex + 1;
+                    if (frontIndex == capacity) {
+                        frontIndex = 0;
+                    }
+                    count = count - 1;
+                } else {
+                    keepTrimming = false;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    ~RecentCounter() {
+        delete[] timestamps;
+    }
+};
