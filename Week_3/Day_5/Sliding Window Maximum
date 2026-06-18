@@ -1,1 +1,66 @@
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        int n = nums.size();
 
+        int* value = new int[n];
+        for (int i = 0; i < n; i++) {
+            value[i] = nums[i];
+        }
+
+        int* dequeArray = new int[n];
+        int frontPos = 0;
+        int backPos = -1;
+        int dequeSize = 0;
+
+        int resultLength = n - k + 1;
+        int* resultArray = new int[resultLength];
+        int resultCount = 0;
+
+        for (int i = 0; i < n; i++) {
+            bool keepPoppingBack = true;
+            while (keepPoppingBack) {
+                if (dequeSize == 0) {
+                    keepPoppingBack = false;
+                } else {
+                    int lastIndex = dequeArray[backPos];
+                    if (value[lastIndex] <= value[i]) {
+                        backPos = backPos - 1;
+                        dequeSize = dequeSize - 1;
+                    } else {
+                        keepPoppingBack = false;
+                    }
+                }
+            }
+
+            backPos = backPos + 1;
+            dequeArray[backPos] = i;
+            dequeSize = dequeSize + 1;
+
+            int windowStart = i - k + 1;
+            int currentFrontIndex = dequeArray[frontPos];
+            if (currentFrontIndex < windowStart) {
+                frontPos = frontPos + 1;
+                dequeSize = dequeSize - 1;
+            }
+
+            bool windowIsFull = (i >= k - 1);
+            if (windowIsFull) {
+                int maxIndexNow = dequeArray[frontPos];
+                resultArray[resultCount] = value[maxIndexNow];
+                resultCount = resultCount + 1;
+            }
+        }
+
+        vector<int> result;
+        for (int j = 0; j < resultCount; j++) {
+            result.push_back(resultArray[j]);
+        }
+
+        delete[] value;
+        delete[] dequeArray;
+        delete[] resultArray;
+
+        return result;
+    }
+};
