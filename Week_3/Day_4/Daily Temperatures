@@ -1,1 +1,49 @@
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        int n = temperatures.size();
 
+        int* temp = new int[n];
+        for (int i = 0; i < n; i++) {
+            temp[i] = temperatures[i];
+        }
+
+        int* result = new int[n];
+        for (int i = 0; i < n; i++) {
+            result[i] = 0;
+        }
+
+        int* pending = new int[n];
+        int top = -1;
+
+        for (int day = 0; day < n; day++) {
+            bool keepPopping = true;
+            while (keepPopping) {
+                if (top < 0) {
+                    keepPopping = false;
+                } else {
+                    int waitingDay = pending[top];
+                    if (temp[day] > temp[waitingDay]) {
+                        result[waitingDay] = day - waitingDay;
+                        top = top - 1;   
+                    } else {
+                        keepPopping = false;
+                    }
+                }
+            }
+            top = top + 1;
+            pending[top] = day;          
+        }
+
+        vector<int> answer(n);
+        for (int i = 0; i < n; i++) {
+            answer[i] = result[i];
+        }
+
+        delete[] temp;
+        delete[] result;
+        delete[] pending;
+
+        return answer;
+    }
+};
