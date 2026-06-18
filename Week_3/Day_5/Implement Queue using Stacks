@@ -1,1 +1,82 @@
+class MyStack {
+private:
+    struct Node {
+        int value;
+        Node* next;
+    };
 
+    Node* head;
+
+public:
+    MyStack() {
+        head = nullptr;
+    }
+
+    void push(int x) {
+        Node* newNode = new Node();
+        newNode->value = x;
+        newNode->next = head;
+        head = newNode;
+    }
+
+    int pop() {
+        int topValue = head->value;
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        return topValue;
+    }
+
+    int top() {
+        return head->value;
+    }
+
+    bool empty() {
+        return head == nullptr;
+    }
+
+    ~MyStack() {
+        while (head != nullptr) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+};
+
+class MyQueue {
+private:
+    MyStack inStack;
+    MyStack outStack;
+
+    void transferIfNeeded() {
+        if (outStack.empty()) {
+            while (!inStack.empty()) {
+                int value = inStack.pop();
+                outStack.push(value);
+            }
+        }
+    }
+
+public:
+    MyQueue() {
+    }
+
+    void push(int x) {
+        inStack.push(x);
+    }
+
+    int pop() {
+        transferIfNeeded();
+        return outStack.pop();
+    }
+
+    int peek() {
+        transferIfNeeded();
+        return outStack.top();
+    }
+
+    bool empty() {
+        return inStack.empty() && outStack.empty();
+    }
+};
