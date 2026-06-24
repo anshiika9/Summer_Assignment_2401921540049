@@ -1,1 +1,24 @@
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        return checkNode(root, nullptr, nullptr);
+    }
 
+private:
+    bool checkNode(TreeNode* node, TreeNode* lowerBound, TreeNode* upperBound) {
+        if (node == nullptr) {
+            return true;
+        }
+
+        if (lowerBound != nullptr && node->val <= lowerBound->val) {
+            return false;
+        }
+
+        if (upperBound != nullptr && node->val >= upperBound->val) {
+            return false;
+        }
+
+        return checkNode(node->left, lowerBound, node) &&
+               checkNode(node->right, node, upperBound);
+    }
+};
