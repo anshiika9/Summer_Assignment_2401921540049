@@ -1,1 +1,40 @@
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if (root == nullptr) {
+            return true;
+        }
 
+        queue<TreeNode*> pendingPairs;
+        pendingPairs.push(root->left);
+        pendingPairs.push(root->right);
+
+        while (!pendingPairs.empty()) {
+            TreeNode* nodeA = pendingPairs.front();
+            pendingPairs.pop();
+
+            TreeNode* nodeB = pendingPairs.front();
+            pendingPairs.pop();
+
+            if (nodeA == nullptr && nodeB == nullptr) {
+                continue;
+            }
+
+            if (nodeA == nullptr || nodeB == nullptr) {
+                return false;
+            }
+
+            if (nodeA->val != nodeB->val) {
+                return false;
+            }
+
+            pendingPairs.push(nodeA->left);
+            pendingPairs.push(nodeB->right);
+
+            pendingPairs.push(nodeA->right);
+            pendingPairs.push(nodeB->left);
+        }
+
+        return true;
+    }
+};
