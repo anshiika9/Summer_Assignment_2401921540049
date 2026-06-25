@@ -1,1 +1,43 @@
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if (!root) {
+            return false;
+        }
 
+        const int MAX_NODES = 5000;
+        TreeNode* nodeStack[MAX_NODES];
+        int sumStack[MAX_NODES];
+        int top = 0;
+
+        nodeStack[top] = root;
+        sumStack[top] = targetSum - root->val;
+        top++;
+
+        while (top > 0) {
+            top--;
+            TreeNode* node = nodeStack[top];
+            int remaining = sumStack[top];
+
+            if (node->left == nullptr && node->right == nullptr) {
+                if (remaining == 0) {
+                    return true;
+                }
+            }
+
+            if (node->left != nullptr) {
+                nodeStack[top] = node->left;
+                sumStack[top] = remaining - node->left->val;
+                top++;
+            }
+
+            if (node->right != nullptr) {
+                nodeStack[top] = node->right;
+                sumStack[top] = remaining - node->right->val;
+                top++;
+            }
+        }
+
+        return false;
+    }
+};
