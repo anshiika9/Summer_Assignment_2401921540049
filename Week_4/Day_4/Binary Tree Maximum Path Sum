@@ -1,1 +1,55 @@
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        }
 
+        unordered_map<TreeNode*, int> bestDownward;
+        stack<pair<TreeNode*, int>> traversalStack;
+        traversalStack.push({root, 0});
+
+        int globalBest = root->val;
+
+        while (!traversalStack.empty()) {
+            auto& [node, stage] = traversalStack.top();
+
+            if (node == nullptr) {
+                traversalStack.pop();
+                continue;
+            }
+
+            if (stage == 0) {
+                stage = 1;
+                if (node->left != nullptr) {
+                    traversalStack.push({node->left, 0});
+                }
+            } else if (stage == 1) {
+                stage = 2;
+                if (node->right != nullptr) {
+                    traversalStack.push({node->right, 0});
+                }
+            } else {
+                int fromLeft = 0;
+                int fromRight = 0;
+
+                if (node->left != nullptr && bestDownward.count(node->left)) {
+                    fromLeft = bestDownward[node->left] > 0 ? bestDownward[node->left] : 0;
+                }
+                if (node->right != nullptr && bestDownward.count(node->right)) {
+                    fromRight = bestDownward[node->right] > 0 ? bestDownward[node->right] : 0;
+                }
+
+                int throughNode = node->val + fromLeft + fromRight;
+                globalBest = throughNode > globalBest ? throughNode : globalBest;
+
+                int downwardOnly = node->val + (fromLeft > fromRight ? fromLeft : fromRight);
+                bestDownward[node] = downwardOnly;
+
+                traversalStack.pop();
+            }
+        }
+
+        return globalBest;
+    }
+};
