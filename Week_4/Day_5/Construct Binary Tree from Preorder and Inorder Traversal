@@ -1,1 +1,57 @@
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        int n = preorder.size();
+        if (n == 0) {
+            return nullptr;
+        }
 
+        unordered_map<int, int> positionInInorder;
+        for (int i = 0; i < n; i++) {
+            positionInInorder[inorder[i]] = i;
+        }
+
+        struct Frame {
+            TreeNode* node;
+            int leftBound;
+            int rightBound;
+            int stage;
+        };
+
+        int preIndex = 0;
+        TreeNode* root = new TreeNode(preorder[preIndex]);
+        preIndex++;
+
+        stack<Frame> frames;
+        frames.push({root, 0, n - 1, 0});
+
+        while (!frames.empty()) {
+            Frame& current = frames.top();
+            int splitPoint = positionInInorder[current.node->val];
+
+            if (current.stage == 0) {
+                current.stage = 1;
+
+                if (splitPoint - 1 >= current.leftBound && preIndex < n) {
+                    TreeNode* leftChild = new TreeNode(preorder[preIndex]);
+                    preIndex++;
+                    current.node->left = leftChild;
+                    frames.push({leftChild, current.leftBound, splitPoint - 1, 0});
+                }
+            } else if (current.stage == 1) {
+                current.stage = 2;
+
+                if (splitPoint + 1 <= current.rightBound && preIndex < n) {
+                    TreeNode* rightChild = new TreeNode(preorder[preIndex]);
+                    preIndex++;
+                    current.node->right = rightChild;
+                    frames.push({rightChild, splitPoint + 1, current.rightBound, 0});
+                }
+            } else {
+                frames.pop();
+            }
+        }
+
+        return root;
+    }
+};
