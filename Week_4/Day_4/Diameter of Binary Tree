@@ -1,1 +1,53 @@
+class Solution {
+public:
+    int diameterOfBinaryTree(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        }
 
+        unordered_map<TreeNode*, int> heightOf;
+        stack<pair<TreeNode*, bool>> stk;
+        stk.push({root, false});
+
+        int bestDiameter = 0;
+
+        while (!stk.empty()) {
+            auto [currentNode, childrenProcessed] = stk.top();
+            stk.pop();
+
+            if (currentNode == nullptr) {
+                continue;
+            }
+
+            if (!childrenProcessed) {
+                stk.push({currentNode, true});
+
+                if (currentNode->left != nullptr) {
+                    stk.push({currentNode->left, false});
+                }
+                if (currentNode->right != nullptr) {
+                    stk.push({currentNode->right, false});
+                }
+            } else {
+                int leftSubtreeHeight = 0;
+                int rightSubtreeHeight = 0;
+
+                if (currentNode->left != nullptr) {
+                    leftSubtreeHeight = heightOf[currentNode->left];
+                }
+                if (currentNode->right != nullptr) {
+                    rightSubtreeHeight = heightOf[currentNode->right];
+                }
+
+                int pathThroughNode = leftSubtreeHeight + rightSubtreeHeight;
+                if (pathThroughNode > bestDiameter) {
+                    bestDiameter = pathThroughNode;
+                }
+
+                heightOf[currentNode] = 1 + max(leftSubtreeHeight, rightSubtreeHeight);
+            }
+        }
+
+        return bestDiameter;
+    }
+};
